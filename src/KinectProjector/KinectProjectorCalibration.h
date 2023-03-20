@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 #include <iostream>
 #include "ofMain.h"
+#include "ofxXmlSettings.h"
 #include "libs/dlib/matrix.h"
 #include "libs/dlib/matrix/matrix_qr.h"
 

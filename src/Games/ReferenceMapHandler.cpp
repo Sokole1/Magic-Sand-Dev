@@ -119,6 +119,8 @@ bool CReferenceMapHandler::WriteToFile()
 	std::string refName = "mapGame/ReferenceData/MapReferenceSettings.xml";
 
 	ofXml XMLOut;
+	cout << "CALLeD WRITE TO FILE";
+	/*
 	XMLOut.addChild("MapReferenceSettings");
 	XMLOut.setTo("MapReferenceSettings");
 	XMLOut.addValue("DefaultMap", 0);
@@ -134,7 +136,7 @@ bool CReferenceMapHandler::WriteToFile()
 		XMLOut.addValue("MapName", ReferenceNames[i]);
 		XMLOut.addValue("GroundTruth", ReferenceMaps[i]);
 		XMLOut.setToParent();
-	}
+	}*/
 
 	return XMLOut.save(refName);
 }
@@ -153,27 +155,27 @@ bool CReferenceMapHandler::ReadFromFile()
 		std::cout << "Could not read " << refName << std::endl;
 		return false;
 	}
+	cout << "CALLeD READ FROM FILE";
+	//XMLIn.setTo("MapReferenceSettings");
 
-	XMLIn.setTo("MapReferenceSettings");
+	//DefaultMap = XMLIn.getValue<int>("DefaultMap");
+	//ActualMap = DefaultMap;
 
-	DefaultMap = XMLIn.getValue<int>("DefaultMap");
-	ActualMap = DefaultMap;
+	//XMLIn.setTo("maps");
 
-	XMLIn.setTo("maps");
+	//int nmaps = XMLIn.getNumChildren(); // how many do you have?
 
-	int nmaps = XMLIn.getNumChildren(); // how many do you have?
+	//for (int i = 0; i < nmaps; i++)
+	//{
+	//	XMLIn.setTo("map[" + ofToString(i) + "]");
+	//	std::string rn = XMLIn.getValue<string>("MapName");
+	//	std::string rGT = XMLIn.getValue<string>("GroundTruth");
 
-	for (int i = 0; i < nmaps; i++)
-	{
-		XMLIn.setTo("map[" + ofToString(i) + "]");
-		std::string rn = XMLIn.getValue<string>("MapName");
-		std::string rGT = XMLIn.getValue<string>("GroundTruth");
+	//	ReferenceNames.push_back(rn);
+	//	ReferenceMaps.push_back(rGT);
 
-		ReferenceNames.push_back(rn);
-		ReferenceMaps.push_back(rGT);
-
-		XMLIn.setToParent();
-	}
+	//	XMLIn.setToParent();
+	//}
 
 	return true;
 }

@@ -669,11 +669,12 @@ void KinectProjector::updateROIFromFile()
 {
 	string settingsFile = "settings/kinectProjectorSettings.xml";
 
-	ofXml xml;
-	if (xml.load(settingsFile))
+	ofxXmlSettings XML;
+	if (XML.load(settingsFile))
 	{
-		xml.setTo("KINECTSETTINGS");
-		kinectROI = xml.getValue<ofRectangle>("kinectROI");
+		//kinectROI = XML.getValue<ofRectangle>("kinectROI");
+		string rectangleStr = XML.getValue("KINECTSETTINGS:kinectROI", "0, 0, 0, 0, 0");
+		kinectROI = ofFromString<ofRectangle>(rectangleStr);
 		setNewKinectROI();
 		ROICalibState = ROI_CALIBRATION_STATE_DONE;
 		return;
@@ -1853,10 +1854,10 @@ void KinectProjector::saveCalibrationAndSettings()
 bool KinectProjector::loadSettings(){
     string settingsFile = "settings/kinectProjectorSettings.xml";
     
-    ofXml xml;
-    if (!xml.load(settingsFile))
+	ofxXmlSettings XML;
+    if (!XML.load(settingsFile))
         return false;
-    xml.setTo("KINECTSETTINGS");
+    /*xml.setTo("KINECTSETTINGS");
     kinectROI = xml.getValue<ofRectangle>("kinectROI");
     basePlaneNormalBack = xml.getValue<ofVec3f>("basePlaneNormalBack");
     basePlaneNormal = basePlaneNormalBack;
@@ -1870,6 +1871,24 @@ bool KinectProjector::loadSettings(){
     numAveragingSlots = xml.getValue<int>("numAveragingSlots");
 	doInpainting = xml.getValue<bool>("OutlierInpainting", false);
 	doFullFrameFiltering = xml.getValue<bool>("FullFrameFiltering", false);
+	*/
+	string ofRectangleStrROI = XML.getValue("KINECTSETTINGS:kinectROI", "0, 0, 0, 0, 0");
+	kinectROI = ofFromString<ofRectangle>(ofRectangleStrROI);
+	string ofVec3fStrNormalBack = XML.getValue("KINECTSETTINGS:basePlaneNormalBack", "0, 0, 0");
+	basePlaneNormalBack = ofFromString<ofVec3f>(ofVec3fStrNormalBack);
+	basePlaneNormal = basePlaneNormalBack;
+	string ofVec3fStrOffsetBack = XML.getValue("KINECTSETTINGS:basePlaneOffsetBack", "0, 0, 0");
+	basePlaneOffsetBack = ofFromString<ofVec3f>(ofVec3fStrOffsetBack);
+	basePlaneOffset = basePlaneOffsetBack;
+	string ofVec4fStrbasePlaneEq = XML.getValue("KINECTSETTINGS:basePlaneEq", "0, 0, 0, 0");
+	basePlaneEq = ofFromString<ofVec4f>(ofVec4fStrbasePlaneEq);
+	maxOffsetBack = XML.getValue("KINECTSETTINGS:maxOffsetBack", 0.0);
+	maxOffset = maxOffsetBack;
+	spatialFiltering = XML.getValue("KINECTSETTINGS:spatialFiltering", 0);
+	followBigChanges = XML.getValue("KINECTSETTINGS:followBigChanges", 0);
+	numAveragingSlots = XML.getValue("KINECTSETTINGS:numAveragingSlots", 0);
+	doInpainting = XML.getValue("KINECTSETTINGS:OutlierInpainting", 0);
+	doFullFrameFiltering = XML.getValue("KINECTSETTINGS:FullFrameFiltering", 0);
     return true;
 }
 
@@ -1877,21 +1896,31 @@ bool KinectProjector::saveSettings()
 {
     string settingsFile = "settings/kinectProjectorSettings.xml";
 
-    ofXml xml;
-    xml.addChild("KINECTSETTINGS");
-    xml.setTo("KINECTSETTINGS");
-    xml.addValue("kinectROI", kinectROI);
-    xml.addValue("basePlaneNormalBack", basePlaneNormalBack);
-    xml.addValue("basePlaneOffsetBack", basePlaneOffsetBack);
-    xml.addValue("basePlaneEq", basePlaneEq);
-    xml.addValue("maxOffsetBack", maxOffsetBack);
-    xml.addValue("spatialFiltering", spatialFiltering);
-    xml.addValue("followBigChanges", followBigChanges);
-    xml.addValue("numAveragingSlots", numAveragingSlots);
-	xml.addValue("OutlierInpainting", doInpainting);
-	xml.addValue("FullFrameFiltering", doFullFrameFiltering);
-	xml.setToParent();
-    return xml.save(settingsFile);
+	ofxXmlSettings XML;
+ //   xml.addChild("KINECTSETTINGS");
+ //   xml.setTo("KINECTSETTINGS");
+ //   xml.addValue("kinectROI", kinectROI);
+ //   xml.addValue("basePlaneNormalBack", basePlaneNormalBack);
+ //   xml.addValue("basePlaneOffsetBack", basePlaneOffsetBack);
+ //   xml.addValue("basePlaneEq", basePlaneEq);
+ //   xml.addValue("maxOffsetBack", maxOffsetBack);
+ //   xml.addValue("spatialFiltering", spatialFiltering);
+ //   xml.addValue("followBigChanges", followBigChanges);
+ //   xml.addValue("numAveragingSlots", numAveragingSlots);
+	//xml.addValue("OutlierInpainting", doInpainting);
+	//xml.addValue("FullFrameFiltering", doFullFrameFiltering);
+	//xml.setToParent();
+	XML.addValue("KINECTSETTINGS:kinectROI", ofToString(kinectROI));
+	XML.addValue("KINECTSETTINGS:basePlaneNormalBack", ofToString(basePlaneNormalBack));
+	XML.addValue("KINECTSETTINGS:basePlaneOffsetBack", ofToString(basePlaneOffsetBack));
+	XML.addValue("KINECTSETTINGS:basePlaneEq", ofToString(basePlaneEq));
+	XML.addValue("KINECTSETTINGS:maxOffsetBack", ofToString(maxOffsetBack));
+	XML.addValue("KINECTSETTINGS:spatialFiltering", ofToString(spatialFiltering));
+	XML.addValue("KINECTSETTINGS:followBigChanges", ofToString(followBigChanges));
+	XML.addValue("KINECTSETTINGS:numAveragingSlots", ofToString(numAveragingSlots));
+	XML.addValue("KINECTSETTINGS:OutlierInpainting", ofToString(doInpainting));
+	XML.addValue("KINECTSETTINGS:FullFrameFiltering", ofToString(doFullFrameFiltering));
+    return XML.save(settingsFile);
 }
 
 void KinectProjector::ProcessChessBoardInput(ofxCvGrayscaleImage& image)

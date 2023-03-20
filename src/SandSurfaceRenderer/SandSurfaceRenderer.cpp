@@ -191,7 +191,7 @@ void SandSurfaceRenderer::setupMesh(){
         {
             ofPoint pt = ofPoint(x+kinectROI.x,y+kinectROI.y,0.0f)-ofPoint(0.5,0.5,0); // We move of a half pixel to center the color pixel (more beautiful)
             mesh.addVertex(pt); // make a new vertex
-            mesh.addTexCoord(pt);
+            mesh.addTexCoord(ofVec2f(pt));
         }
     for(unsigned int y=0;y<meshheight-1;y++)
         for(unsigned int x=0;x<meshwidth-1;x++)
@@ -508,13 +508,16 @@ void SandSurfaceRenderer::onSaveModalEvent(ofxModalEvent e){
 bool SandSurfaceRenderer::loadSettings(){
     string settingsFile = "settings/sandSurfaceRendererSettings.xml";
     
-    ofXml xml;
-    if (!xml.load(settingsFile))
+    ofxXmlSettings XML;
+    if (!XML.load(settingsFile))
         return false;
-    xml.setTo("SURFACERENDERERSETTINGS");
-    colorMapFile = xml.getValue<string>("colorMapFile");
-    drawContourLines = xml.getValue<bool>("drawContourLines");
-    contourLineDistance = xml.getValue<float>("contourLineDistance");
+    //colorMapFile = xml.getValue<string>("colorMapFile");
+    //drawContourLines = xml.getValue<bool>("drawContourLines");
+    //contourLineDistance = xml.getValue<float>("contourLineDistance");
+
+    colorMapFile = XML.getValue("SURFACERENDERERSETTINGS:colorMapFile", "");
+    drawContourLines = XML.getValue("SURFACERENDERERSETTINGS:drawContourLines", 0);
+    contourLineDistance = XML.getValue("SURFACERENDERERSETTINGS:contourLineDistance", 0.0);
     
     return true;
 }
@@ -522,14 +525,17 @@ bool SandSurfaceRenderer::loadSettings(){
 bool SandSurfaceRenderer::saveSettings(){
     string settingsFile = "settings/sandSurfaceRendererSettings.xml";
 
-    ofXml xml;
-    xml.addChild("SURFACERENDERERSETTINGS");
-    xml.setTo("SURFACERENDERERSETTINGS");
-    xml.addValue("colorMapFile", colorMapFile);
-    xml.addValue("drawContourLines", drawContourLines);
-    xml.addValue("contourLineDistance", contourLineDistance);
-    xml.setToParent();
-    return xml.save(settingsFile);
+    ofxXmlSettings XML;
+    //xml.addChild("SURFACERENDERERSETTINGS");
+    //xml.setTo("SURFACERENDERERSETTINGS");
+    //xml.addValue("colorMapFile", colorMapFile);
+    //xml.addValue("drawContourLines", drawContourLines);
+    //xml.addValue("contourLineDistance", contourLineDistance);
+    //xml.setToParent();
+    XML.addValue("SURFACERENDERERSETTINGS:colorMapFile", colorMapFile);
+    XML.addValue("SURFACERENDERERSETTINGS:drawContourLines", drawContourLines);
+    XML.addValue("SURFACERENDERERSETTINGS:contourLineDistance", contourLineDistance);
+    return XML.save(settingsFile);
 }
 
 

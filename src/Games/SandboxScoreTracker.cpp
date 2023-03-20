@@ -107,6 +107,7 @@ std::string CSandboxScoreTracker::getScoreImage(int idx)
 bool CSandboxScoreTracker::SaveScoresXML(std::string &fname)
 {
 	ofXml XMLOut;
+	/*
 	XMLOut.addChild("scores");
 	XMLOut.setTo("scores");
 
@@ -119,41 +120,41 @@ bool CSandboxScoreTracker::SaveScoresXML(std::string &fname)
 		XMLOut.addValue("image", scoreImages[i]);
 		XMLOut.addValue("date", scoreDates[i]);
 		XMLOut.setToParent();
-	}
+	}*/
 	return XMLOut.save(fname);
 }
 
 bool CSandboxScoreTracker::LoadScoresXML(std::string &fname)
 {
 	ofXml XMLIn;
-	if (!XMLIn.load(fname))
-	{
-		std::cout << "Could not read " << fname << std::endl;
-		return false;
-	}
-	scores.clear();
-	scoreImages.clear();
-	scoreDates.clear();
+	//if (!XMLIn.load(fname))
+	//{
+	//	std::cout << "Could not read " << fname << std::endl;
+	//	return false;
+	//}
+	//scores.clear();
+	//scoreImages.clear();
+	//scoreDates.clear();
 
-	XMLIn.setTo("scores");
+	//XMLIn.setTo("scores");
 
-	int nscores = XMLIn.getNumChildren(); // how many do you have?
+	//int nscores = XMLIn.getNumChildren(); // how many do you have?
 
-	for (int i = 0; i < nscores; i++)
-	{
-		if (XMLIn.setTo("score[" + ofToString(i) + "]"))
-		{
-			int tsc = XMLIn.getValue<int>("value");
-			std::string tI = XMLIn.getValue<string>("image");
-			std::string tD = XMLIn.getValue<string>("date");
+	//for (int i = 0; i < nscores; i++)
+	//{
+	//	if (XMLIn.setTo("score[" + ofToString(i) + "]"))
+	//	{
+	//		int tsc = XMLIn.getValue<int>("value");
+	//		std::string tI = XMLIn.getValue<string>("image");
+	//		std::string tD = XMLIn.getValue<string>("date");
 
-			scores.push_back(tsc);
-			scoreImages.push_back(tI);
-			scoreDates.push_back(tD);
+	//		scores.push_back(tsc);
+	//		scoreImages.push_back(tI);
+	//		scoreDates.push_back(tD);
 
-			XMLIn.setToParent();
-		}
-	}
+	//		XMLIn.setToParent();
+	//	}
+	//}
 
 	return true;
 }
